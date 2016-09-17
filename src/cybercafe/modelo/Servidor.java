@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package servercybercafe.modelo;
+package cybercafe.modelo;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,11 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import servercybercafe.controlador.masterController;
+import cybercafe.controlador.CServidor;
 
 /**
  *
- * @author edgarcastro
+ * @author Edgar Castro, Luis Salas
+ * @version 1.0.0
  */
 public class Servidor {
     private List<String> clientes;
@@ -33,13 +29,13 @@ public class Servidor {
         this.puerto = puerto;
     }
     
-    public void init() throws RemoteException, AlreadyBoundException{
+    public void iniciar() throws RemoteException, AlreadyBoundException{
         Remote stub = UnicastRemoteObject.exportObject(new IConexion() {
             @Override
             public boolean conectarse(String ip) throws RemoteException {
                 System.out.println("DEBUG: Llegó un nuevo cliente: Ip:"+ip);
                 boolean estado = clientes.add(ip);
-                masterController.updateClients(clientes);
+                CServidor.actualizarClientes(clientes);
                 return estado;
             }
 
@@ -47,7 +43,7 @@ public class Servidor {
             public boolean desconectarse(String ip) throws RemoteException {
                 System.out.println("DEBUG: Llegó un nuevo cliente: Ip:"+ip);
                 boolean estado = clientes.remove(ip);
-                masterController.updateClients(clientes);
+                CServidor.actualizarClientes(clientes);
                 return estado;
             }
         }, 0);
@@ -60,21 +56,21 @@ public class Servidor {
         }
     }
     
-    public void listarClientes(){
-        System.out.println(this.clientes.toString());
-    }
-    
-    public void apagarCliente(String ip) throws RemoteException, NotBoundException{
-        //pass
-        Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
-        IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
-        clienteRemoto.mensaje("APAGAR");
-    }
-    
     public void bloquearCliente(String ip) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
         clienteRemoto.mensaje("BLOQUEAR");
+    }
+     
+    public void desbloquearCliente(String ip) throws RemoteException, NotBoundException{
+        Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
+        IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
+        clienteRemoto.mensaje("DESBLOQUEAR");
+    }
+    public void apagarCliente(String ip) throws RemoteException, NotBoundException{
+        Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
+        IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
+        clienteRemoto.mensaje("APAGAR");
     }
     
     public void reiniciarCliente(String ip) throws RemoteException, NotBoundException{
@@ -82,8 +78,26 @@ public class Servidor {
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
         clienteRemoto.mensaje("REINICIAR");
     }
+    
+    public void cancelarCliente(String ip) throws RemoteException, NotBoundException{
+        Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
+        IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
+        clienteRemoto.mensaje("CANCELAR");
+    }
 
     public List<String> getClientes() {
         return clientes;
+    }
+
+    public void setClientes(List<String> clientes) {
+        this.clientes = clientes;
+    }
+
+    public int getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(int puerto) {
+        this.puerto = puerto;
     }
 }
