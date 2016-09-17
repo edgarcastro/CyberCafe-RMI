@@ -5,10 +5,13 @@
  */
 package servercybercafe;
 
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import servercybercafe.controllers.masterController;
+import servercybercafe.controlador.masterController;
+import servercybercafe.modelo.Servidor;
 
 
 /**
@@ -20,7 +23,7 @@ public class Servercybercafe {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemoteException, AlreadyBoundException{
         try{
   
   JFrame.setDefaultLookAndFeelDecorated(true);
@@ -32,6 +35,9 @@ catch (Exception e)
   e.printStackTrace();
  }
         masterController.init();
+        //Servidor s = new Servidor(7777);
+        //s.init();
+        
     }
     
 }

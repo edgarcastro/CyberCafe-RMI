@@ -3,13 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servercybercafe.views;
+package servercybercafe.vista;
 
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
-import servercybercafe.controllers.masterController;
-import servercybercafe.model.ThreadForClient;
+import servercybercafe.controlador.masterController;
+import servercybercafe.modelo.ThreadForClient;
 
 /**
  *
@@ -167,8 +171,14 @@ public class MainView extends javax.swing.JFrame {
 
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        masterController.initServer(Integer.parseInt(jTextField1.getText()));
+        try {
+            // TODO add your handling code here:
+            masterController.initServer(Integer.parseInt(jTextField1.getText()));
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AlreadyBoundException ex) {
+            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -235,10 +245,10 @@ public class MainView extends javax.swing.JFrame {
         jLabel3.setText(""+number);
     }
     
-    public void updateClients(List<ThreadForClient> clients){
+    public void updateClients(List<String> clients){
         DefaultListModel<String> model = new DefaultListModel<>();
-        for (ThreadForClient client : clients) {
-            model.addElement(client.getNameClient());
+        for (String client : clients) {
+            model.addElement(client);
         }
         jList1.setModel(model);
     }

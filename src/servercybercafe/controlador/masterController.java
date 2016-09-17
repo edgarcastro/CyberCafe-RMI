@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servercybercafe.controllers;
+package servercybercafe.controlador;
 
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
-import servercybercafe.model.Server;
-import servercybercafe.views.MainView;
+import servercybercafe.modelo.Server;
+import servercybercafe.modelo.Servidor;
+import servercybercafe.vista.MainView;
 
 /**
  *
@@ -16,7 +19,8 @@ import servercybercafe.views.MainView;
 public class masterController {
     
     private static MainView mv;
-    private static Server sv;
+    //private static Server sv;
+    private static Servidor s;
     
     public static void init(){
         mv = new MainView();
@@ -24,9 +28,11 @@ public class masterController {
         mv.setVisible(true);
     }
     
-    public static void initServer(int port){
-        sv = new Server(port);
-        sv.start();
+    public static void initServer(int port) throws RemoteException, AlreadyBoundException{
+        s = new Servidor(port);
+        s.init();
+        //sv = new Server(port);
+        //sv.start();
     }
     
     public static void updateClients(List clients){
@@ -35,22 +41,22 @@ public class masterController {
     }
     
     public static void blockClient(int idPC){
-        sv.blockOneClient(idPC);
+        //sv.blockOneClient(idPC);
     }
     
     public static void unBlockClient(int idPC){
-        sv.unBlockOneClient(idPC);
+        //sv.unBlockOneClient(idPC);
     }
     
     public static void apagarCliente(int idPC){
-        sv.apagarOneCliente(idPC);
+        //sv.apagarOneCliente(idPC);
     }
     
     public static void reiniciarCliente(int idPC){
-        sv.reiniciarOneCliente(idPC);
+        //sv.reiniciarOneCliente(idPC);
     }
     
     public static void cancelarOperacion(int idPC){
-        sv.cancelarOperacion(idPC);
+        //sv.cancelarOperacion(idPC);
     }
 }
