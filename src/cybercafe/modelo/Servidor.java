@@ -28,7 +28,12 @@ public class Servidor {
         this.clientes = new ArrayList<>();
         this.puerto = puerto;
     }
-    
+    /**
+     * Método para implementar los métodos remotos que tendrá el servidor.
+     * 
+     * @throws RemoteException
+     * @throws AlreadyBoundException 
+     */
     public void iniciar() throws RemoteException, AlreadyBoundException{
         Remote stub = UnicastRemoteObject.exportObject(new IConexion() {
             @Override
@@ -55,30 +60,61 @@ public class Servidor {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    /**
+     * Método para bloquear cliente
+     * 
+     * @param ip Dirección IP del cliente que se va a realizar la acción.
+     * @throws RemoteException
+     * @throws NotBoundException 
+     */
     public void bloquearCliente(String ip) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
         clienteRemoto.mensaje("BLOQUEAR");
     }
-     
+    /**
+     * Método para desbloquear cliente
+     * 
+     * @param ip Dirección IP del cliente que se va a realizar la acción.
+     * @throws RemoteException
+     * @throws NotBoundException 
+     */ 
     public void desbloquearCliente(String ip) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
         clienteRemoto.mensaje("DESBLOQUEAR");
     }
+    /**
+     * Método para apagar cliente
+     * 
+     * @param ip Dirección IP del cliente que se va a realizar la acción.
+     * @throws RemoteException
+     * @throws NotBoundException 
+     */
     public void apagarCliente(String ip) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
         clienteRemoto.mensaje("APAGAR");
     }
-    
+    /**
+     * Método para reiniciar cliente
+     * 
+     * @param ip Dirección IP del cliente que se va a realizar la acción.
+     * @throws RemoteException
+     * @throws NotBoundException 
+     */
     public void reiniciarCliente(String ip) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
         clienteRemoto.mensaje("REINICIAR");
     }
-    
+    /**
+     * Método para cancelar operacion en cliente
+     * 
+     * @param ip Dirección IP del cliente que se va a realizar la acción.
+     * @throws RemoteException
+     * @throws NotBoundException 
+     */
     public void cancelarCliente(String ip) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry(ip, Registry.REGISTRY_PORT);
         IClienteRemoto clienteRemoto = (IClienteRemoto) registry.lookup(ip);
